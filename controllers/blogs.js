@@ -54,9 +54,13 @@ router.post("/", tokenExtractor, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", blogFinder, async (req, res, next) => {
+router.delete("/:id", blogFinder, tokenExtractor, async (req, res, next) => {
   try {
-    await req.blog.destroy();
+    console.log("current user:", req.decodedToken);
+    const blogCreatedByUser = req.decodedToken.id === req.blog.userId;
+    if (!blogCreatedByUser)
+      return res.status(403).json({ error: "blog not created by you" });
+    const user = await req.blog.destroy();
     return res.sendStatus(204);
   } catch (e) {
     next(e);
