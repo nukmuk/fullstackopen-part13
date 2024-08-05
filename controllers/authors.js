@@ -6,7 +6,6 @@ const router = require("express").Router();
 router.get("/", async (req, res, next) => {
   try {
     const blogs = await Blog.findAll({
-      // attributes: [[sequelize.fn("COUNT", sequelize.col("likes")), "n_likes"]],
       attributes: [
         "author",
         [sequelize.fn("COUNT", sequelize.col("id")), "blogs"],
