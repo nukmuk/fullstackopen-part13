@@ -30,11 +30,13 @@ router.get("/:id", async (req, res) => {
         as: "readings",
         attributes: { exclude: ["userId"] },
         through: {
-          attributes: [],
+          attributes: { exclude: ["blogId", "userId"] },
+          as: "readinglists",
         },
       },
     ],
   });
+  
   if (user) {
     res.json(user);
   } else {
